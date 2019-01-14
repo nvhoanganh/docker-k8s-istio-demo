@@ -1,16 +1,9 @@
-# if you have not login and select the correct subscription
-# az.cmd login
-# az.cmd account set --subscription "76d03a17-20be-4175-bbed-ca6d7819c68f"
-
 # create new Azure resource group
 az.cmd group create --name docker-training --location SoutheastAsia
 az.cmd aks create -g docker-training -n docker-training --location SoutheastAsia --kubernetes-version 1.11.5 --enable-addons http_application_routing --generate-ssh-keys
 
 # switch to the correct cluster
 az.cmd aks get-credentials --resource-group docker-training --name docker-training
-
-#  if helm is not installed
-# choco install kubernetes-helm
 
 # init helm on the Azure cluster
 helm init
@@ -44,7 +37,7 @@ kubectl.exe get svc -n istio-system
 
 
 # now hit http://IP/api/values you should see values 1 and values 2 returned
-# now hit http://IP/api/values with header x-user=test you should see canary 1 and canary 2 returned
+# now hit http://IP/api/values with header x-user=test (via Postman) you should see canary 1 and canary 2 returned
 
 # run Grafana and open http://localhost:3000/dashboard/db/istio-mesh-dashboard and login with admin:admin
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
