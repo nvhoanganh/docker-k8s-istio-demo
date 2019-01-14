@@ -16,3 +16,7 @@ Notes:
 
 `helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set kiali.enabled=true --set grafana.enabled=true --set tracing.enabled=true --set global.configValidation=false
 `
+
+### Delete your cluster once you are done to avoid being charged
+1. Run
+`az.cmd group delete --name docker-training`
