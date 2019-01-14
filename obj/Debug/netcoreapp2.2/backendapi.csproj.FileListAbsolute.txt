@@ -1,0 +1,14 @@
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\bin\Debug\netcoreapp2.2\backendapi.deps.json
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\bin\Debug\netcoreapp2.2\backendapi.runtimeconfig.json
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\bin\Debug\netcoreapp2.2\backendapi.runtimeconfig.dev.json
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\bin\Debug\netcoreapp2.2\backendapi.dll
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\bin\Debug\netcoreapp2.2\backendapi.pdb
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.csprojAssemblyReference.cache
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.csproj.CoreCompileInputs.cache
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.RazorAssemblyInfo.cache
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.RazorAssemblyInfo.cs
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.AssemblyInfoInputs.cache
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.AssemblyInfo.cs
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.RazorTargetAssemblyInfo.cache
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.dll
+C:\AnthonyNguyenData\source\personal\learn\docker\backendapi\obj\Debug\netcoreapp2.2\backendapi.pdb
