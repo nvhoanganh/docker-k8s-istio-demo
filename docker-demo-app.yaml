@@ -1,32 +1,37 @@
-apiVersion: extensions/v1beta1
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: demo-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    name: demo-ingress
+    annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: 'false'
 spec:
-  rules:
-    - http:
-        paths:
-          - path: /api
-            backend:
-              serviceName: apitestservice-service
-              servicePort: 80
+    ingressClassName: nginx-example
+    rules:
+        - http:
+              paths:
+                  - path: /api
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: apitestservice-service
+                            port:
+                                number: 80
 
----      
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: apitestservice-service
+    name: apitestservice-service
 spec:
-  type: NodePort
-  ports:
-  - port: 80
-    protocol: TCP
-  selector:
-    app: rbus
-    tier: backend
-    service: apitestservice
+    type: NodePort
+    ports:
+        - port: 80
+          protocol: TCP
+    selector:
+        app: rbus
+        tier: backend
+        service: apitestservice
 
 #################################
 #        BACKEND WORKLOAD
@@ -35,123 +40,121 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apitestservice-deploy
-  labels:
-    app: rbus
-    tier: backend
-    service: apitestservice
-spec:
-  selector:
-    matchLabels:
-      app: rbus
-      tier: backend
-      service: apitestservice
-      version: stable
-  replicas: 2
-  template:
-    metadata:
-      labels:
+    name: apitestservice-deploy
+    labels:
         app: rbus
         tier: backend
         service: apitestservice
-        version: stable
-    spec:
-      containers:
-      - name: worker
-        image: nvhoanganh1909/testdemoapi:latest
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
-
-
+spec:
+    selector:
+        matchLabels:
+            app: rbus
+            tier: backend
+            service: apitestservice
+            version: stable
+    replicas: 2
+    template:
+        metadata:
+            labels:
+                app: rbus
+                tier: backend
+                service: apitestservice
+                version: stable
+        spec:
+            containers:
+                - name: worker
+                  image: nvhoanganh1909/testdemoapi:latest
+                  env:
+                      - name: ASPNETCORE_ENVIRONMENT
+                        value: 'Production'
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apitestservice-deploy-canary
-  labels:
-    app: rbus
-    tier: backend
-    service: apitestservice
-spec:
-  selector:
-    matchLabels:
-      app: rbus
-      tier: backend
-      service: apitestservice
-      version: canary
-  replicas: 2
-  template:
-    metadata:
-      labels:
+    name: apitestservice-deploy-canary
+    labels:
         app: rbus
         tier: backend
         service: apitestservice
-        version: canary
-    spec:
-      containers:
-      - name: worker
-        image: nvhoanganh1909/demoappapi:canary
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
+spec:
+    selector:
+        matchLabels:
+            app: rbus
+            tier: backend
+            service: apitestservice
+            version: canary
+    replicas: 2
+    template:
+        metadata:
+            labels:
+                app: rbus
+                tier: backend
+                service: apitestservice
+                version: canary
+        spec:
+            containers:
+                - name: worker
+                  image: nvhoanganh1909/demoappapi:canary
+                  env:
+                      - name: ASPNETCORE_ENVIRONMENT
+                        value: 'Production'
 
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: apitestservice-service
+    name: apitestservice-service
 spec:
-  host: apitestservice-service
-  subsets:
-  - name: stable
-    labels:
-      version: stable
-  - name: canary
-    labels:
-      version: canary
+    host: apitestservice-service
+    subsets:
+        - name: stable
+          labels:
+              version: stable
+        - name: canary
+          labels:
+              version: canary
 
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: testapp-gateway
+    name: testapp-gateway
 spec:
-  selector:
-    istio: ingressgateway # use istio default controller
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
+    selector:
+        istio: ingress # use istio default controller
+    servers:
+        - port:
+              number: 80
+              name: http
+              protocol: HTTP
+          hosts:
+              - '*'
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: testap-api
+    name: testap-api
 spec:
-  hosts:
-  - "*"
-  gateways:
-  - testapp-gateway
-  http:
-  - match:
-    - uri:
-        prefix: "/api/"
-      headers:
-        x-user:
-          exact: test
-    route:
-    - destination:
-        host: apitestservice-service
-        subset: canary
-  - match:
-    - uri:
-        prefix: "/api/"
-    route:
-    - destination:
-        host: apitestservice-service
-        subset: stable
+    hosts:
+        - '*'
+    gateways:
+        - testapp-gateway
+    http:
+        - match:
+              - uri:
+                    prefix: '/api/'
+                headers:
+                    x-user:
+                        exact: test
+          route:
+              - destination:
+                    host: apitestservice-service
+                    subset: canary
+        - match:
+              - uri:
+                    prefix: '/api/'
+          route:
+              - destination:
+                    host: apitestservice-service
+                    subset: stable

@@ -1,0 +1,8 @@
+# if you call this you will get ["value1", "value2"] only
+###
+GET http://20.241.138.16/api/values
+
+# if you call this however, you will always get ["canary 1", "canary 2"]
+###
+GET http://20.241.138.16/api/values
+x-user: test

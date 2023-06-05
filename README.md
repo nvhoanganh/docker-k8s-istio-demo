@@ -1,22 +1,11 @@
-## Quick Tutorial on Docker, Kubernetes, Istio on Azure Kubernetes Service (AKS)
+## Quick Tutorial on Docker, Kubernetes, Istio
 
 ### Before you start
-1. Make sure you download and install `Azure cli`
-2. Login to Azure using `az login`
-3. Select the correct Subscription using `az account set --subscription` command
-4. Install `Chocolatey` (https://chocolatey.org/)
-5. Install `kubectl` using Cholatey (https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-6. Install `Helm` using Cholatey (https://docs.helm.sh/using_helm/)
-   
+1. make sure you have a running k8s cluster in Azure or AWS
+2. follow https://istio.io/latest/docs/setup/install/helm/ to install istio to your cluster (before you have any apps installed)
 
-### Run commands in `setup-steps.sh` using GIT-Bash ONE BY ONE
-Notes:
-1. `docker-training` is the name of the Resource group and the Kubernetes cluster (you can name it whatever you want). 
-2. the `istio-1.0.5.yml` file is generated using `Helm template` (https://istio.io/docs/setup/kubernetes/helm-install/#option-1-install-with-helm-via-helm-template) with all options enabled. 
-
-`helm install install/kubernetes/helm/istio --name istio --namespace istio-system --set kiali.enabled=true --set grafana.enabled=true --set tracing.enabled=true --set global.configValidation=false
-`
-
-### Delete your cluster once you are done to avoid being charged
-1. Run
-`az.cmd group delete --name docker-training`
+### Get External IP of the Istio
+1. run `kubectl get svc -n istio-ingress` and copy the EXTERNAL-IP
+2. deploy the app by running `kubectl apply -f docker-demo-app.yaml`
+3. run `curl http://20.241.138.16/api/values` and you notice you only get `["value1","value2"]` back
+4. but if you run `curl http://20.241.138.16/api/values --header "x-user: test"` you always get `["canary 1","canary 2"]`. This demonstrate one feature of Envoy proxy

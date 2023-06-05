@@ -15,9 +15,9 @@ kubectl create serviceaccount --namespace kube-system tiller
 kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
 
-# install istio 
-kubectl.exe create ns istio-system
-kubectl.exe apply -f istio-1.0.5.yaml
+# install istio
+kubectl create ns istio-system
+kubectl apply -f istio-1.0.5.yaml
 
 # WAIT AND make sure ALL istio services is now installed and RUNNING and COMPLETED (kiali, zipkin, prometheus, grafana)
 kubectl get svc -n istio-system
@@ -27,13 +27,13 @@ kubectl get pods -n istio-system
 kubectl label namespace default istio-injection=enabled
 
 # now deploy the app
-kubectl.exe apply -f docker-demo-app.yaml --record
+kubectl apply -f docker-demo-app.yaml --record
 
 # get list of pods and make sure there are 2 containers running in each POD (one of them is the istio-proxy)
-kubectl.exe get pods
+kubectl get pods
 
 # get public IP of Istio ingress
-kubectl.exe get svc -n istio-system
+kubectl get svc -n istio-system
 
 
 # now hit http://IP/api/values you should see values 1 and values 2 returned
