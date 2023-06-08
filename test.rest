@@ -6,3 +6,7 @@ GET http://20.241.138.16/api/values
 ###
 GET http://20.241.138.16/api/values
 x-user: test
+
+
+###
+GET http://20.241.138.16/flask
